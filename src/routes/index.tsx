@@ -1,24 +1,118 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState, type FormEvent } from "react";
+import { ArrowRight, Trash2 } from "lucide-react";
+import { AppShell } from "@/components/AppShell";
+import { CategoryChip } from "@/components/CategoryChip";
+import { useExpenses } from "@/hooks/use-expenses";
+import { formatINR, isSameDay } from "@/lib/expenses";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "PaisaWise — Student Expense Tracker in Rupees" },
+      {
+        name: "description",
+        content:
+          "Type an expense like 'chai 20' and PaisaWise logs it with a category. Track daily student spending in INR, right on your device.",
+      },
+      { property: "og:title", content: "PaisaWise — Student Expense Tracker" },
+      {
+        property: "og:description",
+        content: "Log expenses in one line, see today's spend in rupees instantly.",
+      },
+    ],
+  }),
+  component: Home,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Home() {
+  const { expenses, hydrated, addFromText, remove } = useExpenses();
+  const [value, setValue] = useState("");
+  const [error, setError] = useState(false);
+
+  const today = expenses.filter((e) => isSameDay(e.createdAt, Date.now()));
+  const total = today.reduce((s, e) => s + e.amount, 0);
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!addFromText(value)) {
+      setError(true);
+      return;
+    }
+    setError(false);
+    setValue("");
+  };
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <AppShell>
+      <h1 className="text-3xl font-bold">Kya kharcha hua aaj?</h1>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Type it naturally — <span className="text-foreground">“chai 20”</span>,{" "}
+        <span className="text-foreground">“auto 60”</span>, <span className="text-foreground">“xerox 15”</span>.
+      </p>
+
+      <form onSubmit={submit} className="mt-6">
+        <div className="flex items-center gap-2 rounded-2xl border border-border bg-card p-2 shadow-sm focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/10">
+          <input
+            value={value}
+            onChange={(e) => {
+              setValue(e.target.value);
+              setError(false);
+            }}
+            placeholder="type your expense..."
+            aria-label="Type your expense"
+            className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-base outline-none placeholder:text-muted-foreground"
+          />
+          <button
+            type="submit"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-opacity hover:opacity-90"
+            aria-label="Add expense"
+          >
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+        {error && (
+          <p className="mt-2 text-xs text-destructive">
+            Add an amount too — like “samosa 25”.
+          </p>
+        )}
+      </form>
+
+      <div className="mt-8 flex items-baseline justify-between">
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          Today
+        </h2>
+        <p className="font-display text-xl font-bold">{formatINR(total)}</p>
+      </div>
+
+      <ul className="mt-3 space-y-2">
+        {hydrated && today.length === 0 && (
+          <li className="rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+            Nothing logged yet today. Clean slate!
+          </li>
+        )}
+        {today.map((e) => (
+          <li
+            key={e.id}
+            className="group flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3"
+          >
+            <div className="min-w-0 flex-1">
+              <p className="truncate font-medium">{e.note}</p>
+              <div className="mt-1.5">
+                <CategoryChip category={e.category} />
+              </div>
+            </div>
+            <p className="font-display font-semibold">{formatINR(e.amount)}</p>
+            <button
+              onClick={() => remove(e.id)}
+              aria-label={`Delete ${e.note}`}
+              className="text-muted-foreground opacity-0 transition-opacity hover:text-destructive focus:opacity-100 group-hover:opacity-100"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </li>
+        ))}
+      </ul>
+    </AppShell>
   );
 }
