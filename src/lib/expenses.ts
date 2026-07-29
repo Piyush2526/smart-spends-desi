@@ -89,8 +89,30 @@ export interface Expense {
   note: string;
   amount: number;
   category: CategoryId;
+  merchant?: string | null;
   createdAt: number;
 }
+
+/** Maps the AI parser's category labels onto this app's category ids. */
+export function mapAICategory(label: string | undefined | null): CategoryId {
+  switch ((label ?? "").trim().toLowerCase()) {
+    case "food":
+      return "food";
+    case "travel":
+      return "travel";
+    case "education":
+      return "study";
+    case "entertainment":
+      return "fun";
+    case "shopping":
+      return "shopping";
+    case "bills":
+      return "rent";
+    default:
+      return "other";
+  }
+}
+
 
 export function detectCategory(text: string): CategoryId {
   const words = text.toLowerCase().replace(/[^a-z\s]/g, " ").split(/\s+/).filter(Boolean);
