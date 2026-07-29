@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { ArrowRight, Trash2 } from "lucide-react";
+import { ArrowRight, Loader2, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { CategoryChip } from "@/components/CategoryChip";
 import { useExpenses } from "@/hooks/use-expenses";
@@ -26,16 +26,18 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const { expenses, hydrated, addFromText, remove } = useExpenses();
+  const { expenses, hydrated, parsing, addFromText, remove } = useExpenses();
   const [value, setValue] = useState("");
   const [error, setError] = useState(false);
 
   const today = expenses.filter((e) => isSameDay(e.createdAt, Date.now()));
   const total = today.reduce((s, e) => s + e.amount, 0);
 
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!addFromText(value)) {
+    if (parsing) return;
+    const result = await addFromText(value);
+    if (!result.ok) {
       setError(true);
       return;
     }
@@ -47,8 +49,9 @@ function Home() {
     <AppShell>
       <h1 className="text-3xl font-bold">Kya kharcha hua aaj?</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Type it naturally — <span className="text-foreground">“chai 20”</span>,{" "}
-        <span className="text-foreground">“auto 60”</span>, <span className="text-foreground">“xerox 15”</span>.
+        Type it naturally — <span className="text-foreground">“250 zomato dinner with friends”</span>,{" "}
+        <span className="text-foreground">“auto 60 rs to college”</span>,{" "}
+        <span className="text-foreground">“gpay 120 chai”</span>.
       </p>
 
       <form onSubmit={submit} className="mt-6">
@@ -61,22 +64,32 @@ function Home() {
             }}
             placeholder="type your expense..."
             aria-label="Type your expense"
-            className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-base outline-none placeholder:text-muted-foreground"
+            disabled={parsing}
+            className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-base outline-none placeholder:text-muted-foreground disabled:opacity-60"
           />
           <button
             type="submit"
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-opacity hover:opacity-90"
+            disabled={parsing}
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
             aria-label="Add expense"
           >
-            <ArrowRight className="h-4 w-4" />
+            {parsing ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <ArrowRight className="h-4 w-4" />
+            )}
           </button>
         </div>
+        {parsing && (
+          <p className="mt-2 text-xs text-muted-foreground">Reading your expense…</p>
+        )}
         {error && (
           <p className="mt-2 text-xs text-destructive">
-            Add an amount too — like “samosa 25”.
+            Couldn’t find an amount — try “samosa 25”.
           </p>
         )}
       </form>
+
 
       <div className="mt-8 flex items-baseline justify-between">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
