@@ -1,4 +1,4 @@
-![image alt](https://github.com/Piyush2526/smart-spends-desi/blob/34793d6095b1PbWWqgKDBDorh525uecKaGZD21FGSoCeR/Screenshot%202026-07-29%20174546.png)
+
 # PaisaWise Tracker
 
 Build "PaisaWise" — a student expense tracker:
