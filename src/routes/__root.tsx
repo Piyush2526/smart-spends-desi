@@ -77,13 +77,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "PaisaWise — Student Expense Tracker" },
+      { title: "PaisaWise — Student Expense Tracker in Rupees" },
       {
         name: "description",
-        content: "Track daily student expenses in rupees with one-line entries.",
+        content: "Type an expense like 'chai 20' and PaisaWise logs it with a category. Track daily student spending in INR, right on your device.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "PaisaWise — Student Expense Tracker in Rupees" },
+      { name: "twitter:title", content: "PaisaWise — Student Expense Tracker in Rupees" },
+      { property: "og:description", content: "Type an expense like 'chai 20' and PaisaWise logs it with a category. Track daily student spending in INR, right on your device." },
+      { name: "twitter:description", content: "Type an expense like 'chai 20' and PaisaWise logs it with a category. Track daily student spending in INR, right on your device." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/456aaa61-9760-4687-b771-99f4798a8f71" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/456aaa61-9760-4687-b771-99f4798a8f71" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },

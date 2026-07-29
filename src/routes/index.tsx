@@ -15,10 +15,10 @@ export const Route = createFileRoute("/")({
         content:
           "Type an expense like 'chai 20' and PaisaWise logs it with a category. Track daily student spending in INR, right on your device.",
       },
-      { property: "og:title", content: "PaisaWise — Student Expense Tracker" },
+      { property: "og:title", content: "PaisaWise — Student Expense Tracker in Rupees" },
       {
         property: "og:description",
-        content: "Log expenses in one line, see today's spend in rupees instantly.",
+        content: "Type an expense like 'chai 20' and PaisaWise logs it with a category. Track daily student spending in INR, right on your device.",
       },
     ],
   }),
