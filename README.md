@@ -1,14 +1,32 @@
-# Welcome to your Lovable project
+# PaisaWise Tracker
+
+Build "PaisaWise" — a student expense tracker:
+
+- Home: one input box ("type your expense..."),
+
+  list of today's expenses below with category
+
+  chips and colors
+
+- Dashboard: pie chart by category, bar chart
+
+  by week, biggest expense highlighted
+
+- Insights tab: placeholder for AI monthly tips
+
+- Store data locally, INR currency, clean UI
 
 This project was built with [Lovable](https://lovable.dev).
 
+**Live app**: https://smart-spends-desi.lovable.app
+
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/004fe2b8-10ec-44ac-9a57-35b278bf5ca1).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +38,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
