@@ -1,4 +1,4 @@
-
+https://github.com/user-attachments/assets/0daa1623-49a2-4dbc-8fc1-afe41d421fe7
 # PaisaWise Tracker
 
 Build "PaisaWise" — a student expense tracker:
