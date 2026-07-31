@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Check, Copy, Minus, X } from "lucide-react";
+import { Check, Copy, Minus } from "lucide-react";
 import { ResumeShell } from "@/components/ResumeShell";
 import { loadRun, type StoredRun } from "@/lib/resume-store";
 
@@ -251,5 +251,3 @@ function CopyButton({ text }: { text: string }) {
     </button>
   );
 }
-
-export { X };
